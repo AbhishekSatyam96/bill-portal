@@ -3,6 +3,8 @@ import './App.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Dashboard from './components/Dashboard';
+import Store from './redux/store';
+import { Provider } from 'react-redux';
 
 function App() {
   return (
@@ -21,9 +23,11 @@ function App() {
           Learn React
         </a>
       </header> */}
-      <Header />
-      <Dashboard />
-      <Footer />
+      <Provider store={Store}>
+        <Header />
+        <Dashboard />
+        <Footer />
+      </Provider>
     </div>
   );
 }

@@ -32,17 +32,22 @@ let initialState = {
     },
     {
       "id": 5,
-      "description": "Tuition", "category": "education", "amount": "2200",
+      "description": "Tuition",
+      "category": "education",
+      "amount": "2200",
       "date": "01-12-2021"
     },
     {
       "id": 6,
-      "description": "Laundry", "category": "Personal Care", "amount": "320",
+      "description": "Laundry",
+      "category": "Personal Care",
+      "amount": "320",
       "date": "01-14-2020"
     },
     {
       "id": 7,
-      "description": "Vacation", "category": "Travel",
+      "description": "Vacation",
+      "category": "Travel",
       "amount": "3430",
       "date": "02-18-2020"
     }
