@@ -7,12 +7,14 @@ import { addBill, editBill, deleteBill } from "../../redux/actions/BillActions";
 import { Table, Button, Input } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
+import BillForm from './billForm';
 class BillList extends Component {
     constructor(props) {
         super(props);
         this.state = {
             searchText: '',
-            searchedColumn: ''
+            searchedColumn: '',
+            operation: ''
         }
     }
     componentDidMount = () => {
@@ -86,7 +88,14 @@ class BillList extends Component {
         )),
     });
 
+    closeModal = () => {
+        this.setState({operation: ''})
+    }
+
     render() {
+        const {
+            operation
+        } = this.state;
         const columns = [
             {
                 title: 'Id',
@@ -103,38 +112,50 @@ class BillList extends Component {
                 title: 'Description',
                 dataIndex: 'description',
                 key: 'description',
+                ...this.getColumnSearchProps('description')
             },
             {
                 title: 'Date',
                 dataIndex: 'date',
                 key: 'date',
+                ...this.getColumnSearchProps('date')
             },
             {
                 title: 'Amount',
                 dataIndex: 'amount',
                 key: 'amount',
+                ...this.getColumnSearchProps('amount')
             },
             {
                 title: 'Action',
                 width: '20%',
                 render: () => (
                     <div>
-                        <Button type="primary"
+                        <Button
+                            icon={<EditOutlined />}
                             style={{ backgroundColor: '#e56f0a', color: 'white', borderRadius: '100px', marginRight: '10px' }}
                         >
-                            <EditOutlined />
+
                             Edit</Button>
-                        <Button type="danger" style={{ backgroundColor: '#ee0202', color: 'white', borderRadius: '100px' }}>
-                            <DeleteOutlined />Delete</Button>
+                        <Button
+                            icon={<DeleteOutlined />}
+                            style={{ backgroundColor: '#ee0202', color: 'white', borderRadius: '100px' }}>
+                            Delete</Button>
                     </div>
                 )
             }
         ];
         return (
             <div>
-                <Button type="primary"
+                {operation === 'add' ? <BillForm visible={true} closeModal={this.closeModal}/> : null}
+                <Button
+                    type="primary"
                     style={{ float: 'left', margin: '5px' }}
-                ><PlusOutlined />Add Bill</Button>
+                    icon={<PlusOutlined />}
+                    onClick={() => this.setState({operation: 'add'})}
+                >
+                    Add Bill
+                </Button>
                 <Table
                     style={{
                         margin: '20px',
