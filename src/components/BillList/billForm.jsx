@@ -3,7 +3,7 @@ import { Modal, Button, Form, Input, InputNumber, DatePicker, message } from 'an
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { addBill, editBill, deleteBill } from "../../redux/actions/BillActions";
+import { addBill, editBill } from "../../redux/actions/BillActions";
 import Moment from 'moment';
 
 const { TextArea } = Input;
@@ -164,7 +164,6 @@ const mapDispatchToProps = dispatch => {
         {
             addBill,
             editBill,
-            deleteBill
         },
         dispatch
     );

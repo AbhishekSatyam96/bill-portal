@@ -8,7 +8,7 @@ export default class Footer extends Component {
                 Created as an assigment for &nbsp;
                 <a href="https://www.brightmoney.co/" target="_blank" rel="noreferrer">
                     Bright Money
-                </a>
+                </a> &nbsp;by Abhishek Satyam
             </div>
         )
     }

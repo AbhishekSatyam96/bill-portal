@@ -1,3 +1,13 @@
+.table-layout {
+    margin: 10px;
+    padding: 5px;
+}
+
+.action button {
+    color: white;
+    border-radius: 100px;
+}
+
 .ant-table table {
     text-align: center;
 }

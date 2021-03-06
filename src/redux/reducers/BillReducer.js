@@ -74,7 +74,7 @@ const BillReducer = (state = initialState, action) => {
     case ACTION_TYPES.DELETE_BILL:
       return {
         ...state,
-        billData: state.billData.filter((data) => data.id !== payload),
+        billData: state.billData.filter((data) => data.description !== payload),
       };
     default:
       return state;

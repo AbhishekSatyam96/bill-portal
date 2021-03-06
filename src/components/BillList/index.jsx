@@ -103,8 +103,8 @@ class BillList extends Component {
         this.fetchList();
     }
 
-    handleDelete = async(id, amount) => {
-        await this.props.deleteBill(id);
+    handleDelete = async(amount, description) => {
+        await this.props.deleteBill(description);
         this.fetchList();
         message.success(`Deleted Bill card of amount ${amount}`);
     }
@@ -133,12 +133,12 @@ class BillList extends Component {
             operation, editData, record
         } = this.state;
         const columns = [
-            {
-                title: 'Id',
-                dataIndex: 'id',
-                key: 'id',
-                width: '5%'
-            },
+            // {
+            //     title: 'Id',
+            //     dataIndex: 'id',
+            //     key: 'id',
+            //     width: '5%'
+            // },
             {
                 title: 'Category',
                 dataIndex: 'category',
@@ -151,12 +151,6 @@ class BillList extends Component {
                 key: 'description',
                 ...this.getColumnSearchProps('description')
             },
-            // {
-            //     title: 'Date (MM-DD-YYYY)',
-            //     dataIndex: 'date',
-            //     key: 'date',
-            //     ...this.getColumnSearchProps('date')
-            // },
             {
                 title: 'Date',
                 key: 'date',
@@ -180,10 +174,10 @@ class BillList extends Component {
                 title: 'Action',
                 width: '20%',
                 render: (actionIndex) => (
-                    <div>
+                    <div className="action">
                         <Button
                             icon={<EditOutlined />}
-                            style={{ backgroundColor: '#e56f0a', color: 'white', borderRadius: '100px', marginRight: '10px' }}
+                            style={{ marginRight: '10px', backgroundColor: '#e56f0a' }}
                             onClick={() => this.setState({ operation: 'Edit', editData: actionIndex })}
                         >
                             Edit
@@ -192,12 +186,12 @@ class BillList extends Component {
                             title="Are you sure？"
                             okText="Yes"
                             cancelText="No"
-                            onConfirm={() => this.handleDelete(actionIndex.id, actionIndex.amount)}
+                            onConfirm={() => this.handleDelete(actionIndex.amount, actionIndex.description)}
                             onCancel={() => message.info("Operation terminated..!")}
                         >
                             <Button
                                 icon={<DeleteOutlined />}
-                                style={{ backgroundColor: '#ee0202', color: 'white', borderRadius: '100px' }}>
+                                style={{ backgroundColor: '#ee0202'}}>
                                 Delete
                             </Button>
                         </Popconfirm>
@@ -235,11 +229,7 @@ class BillList extends Component {
                     onChange={this.fetchList}
                 />
                 <Table
-                    style={{
-                        margin: '10px',
-                        padding: '5px',
-                        // border: 'solid black 1px'
-                    }}
+                    className="table-layout"
                     dataSource={record}
                     columns={columns}
                     bordered
