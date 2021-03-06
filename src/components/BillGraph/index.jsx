@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './index.css'
 import { config } from "./highChart";
 import { connect } from "react-redux";
 const ReactHighcharts = require("react-highcharts");
