@@ -3,8 +3,8 @@ import './index.css'
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { addBill, editBill, deleteBill } from "../../redux/actions/BillActions";
-import { Table, Button, Input } from 'antd';
+import { deleteBill } from "../../redux/actions/BillActions";
+import { Table, Button, Input, Popconfirm, message } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import BillForm from './billForm';
@@ -14,7 +14,8 @@ class BillList extends Component {
         this.state = {
             searchText: '',
             searchedColumn: '',
-            operation: ''
+            operation: '',
+            editData: []
         }
     }
     componentDidMount = () => {
@@ -89,12 +90,17 @@ class BillList extends Component {
     });
 
     closeModal = () => {
-        this.setState({operation: ''})
+        this.setState({ operation: '' })
+    }
+
+    handleDelete = (id, amount) => {
+        this.props.deleteBill(id);
+        message.success(`Deleted Bill card of amount ${amount}`);
     }
 
     render() {
         const {
-            operation
+            operation, editData
         } = this.state;
         const columns = [
             {
@@ -115,7 +121,7 @@ class BillList extends Component {
                 ...this.getColumnSearchProps('description')
             },
             {
-                title: 'Date',
+                title: 'Date (MM-DD-YYYY)',
                 dataIndex: 'date',
                 key: 'date',
                 ...this.getColumnSearchProps('date')
@@ -129,36 +135,53 @@ class BillList extends Component {
             {
                 title: 'Action',
                 width: '20%',
-                render: () => (
+                render: (actionIndex) => (
                     <div>
                         <Button
                             icon={<EditOutlined />}
                             style={{ backgroundColor: '#e56f0a', color: 'white', borderRadius: '100px', marginRight: '10px' }}
+                            onClick={() => this.setState({ operation: 'Edit', editData: actionIndex })}
                         >
-
-                            Edit</Button>
-                        <Button
-                            icon={<DeleteOutlined />}
-                            style={{ backgroundColor: '#ee0202', color: 'white', borderRadius: '100px' }}>
-                            Delete</Button>
+                            Edit
+                        </Button>
+                        <Popconfirm
+                            title="Are you sure？"
+                            okText="Yes"
+                            cancelText="No"
+                            onConfirm={() => this.handleDelete(actionIndex.id, actionIndex.amount)}
+                            onCancel={() => message.info("Operation terminated..!")}
+                        >
+                            <Button
+                                icon={<DeleteOutlined />}
+                                style={{ backgroundColor: '#ee0202', color: 'white', borderRadius: '100px' }}>
+                                Delete
+                            </Button>
+                        </Popconfirm>
                     </div>
                 )
             }
         ];
         return (
             <div>
-                {operation === 'add' ? <BillForm visible={true} closeModal={this.closeModal}/> : null}
+                {operation ?
+                    <BillForm
+                        visible={true}
+                        closeModal={this.closeModal}
+                        operation={operation}
+                        editData={editData}
+                    />
+                    : null}
                 <Button
                     type="primary"
-                    style={{ float: 'left', margin: '5px' }}
+                    style={{ float: 'left', margin: '3px' }}
                     icon={<PlusOutlined />}
-                    onClick={() => this.setState({operation: 'add'})}
+                    onClick={() => this.setState({ operation: 'Add' })}
                 >
                     Add Bill
                 </Button>
                 <Table
                     style={{
-                        margin: '20px',
+                        margin: '10px',
                         padding: '20px'
                     }}
                     dataSource={this.props.billData}
@@ -182,8 +205,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
-            addBill,
-            editBill,
             deleteBill
         },
         dispatch

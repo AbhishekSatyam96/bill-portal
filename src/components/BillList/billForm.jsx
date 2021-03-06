@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
-import { Modal, Button, Form, Input, InputNumber, DatePicker } from 'antd';
+import { Modal, Button, Form, Input, InputNumber, DatePicker, message } from 'antd';
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { addBill, editBill, deleteBill } from "../../redux/actions/BillActions";
+import Moment from 'moment';
 
 const { TextArea } = Input;
 
-export default class BillForm extends Component {
+class BillForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -15,25 +20,79 @@ export default class BillForm extends Component {
         }
     }
     componentDidMount = () => {
+        console.log("props of bill form", this.props);
         this.setState({ visible: this.props.visible })
+        if (this.props.operation === 'Edit') {
+            const {
+                category, description, amount, date
+            } = this.props.editData;
+            this.setState({
+                category,
+                description,
+                amount,
+                date
+            })
+        }
+    }
+
+    handleChange = (fieldName) => (event) => {
+        if (event && event.target) {
+            this.setState({ [fieldName]: event.target.value })
+        } else {
+            this.setState({ [fieldName]: event })
+        }
     }
 
     handleCancel = () => {
         this.setState({ visible: false });
         this.props.closeModal();
     }
+
+    handleDate = (dateString) => {
+        this.setState({ date: dateString })
+    }
+
+    handleSubmit = () => {
+        const {
+            description, category, date, amount
+        } = this.state;
+        if (this.props.operation === 'Edit') {
+            const payload = {
+                id: this.props.editData.id,
+                description,
+                category,
+                amount,
+                date
+            }
+            this.props.editBill(payload);
+            message.success("Updated successfully..!")
+        } else {
+            const payload = {
+                id: this.props.billData.length + 1,
+                description,
+                category,
+                amount,
+                date
+            }
+            this.props.addBill(payload);
+            message.success(`Bill created with amount of ${amount}`);
+        }
+
+        this.handleCancel();
+    }
+
     render() {
         const {
-            visible
+            visible, category, description, amount, date
         } = this.state;
         const layout = {
             labelCol: { span: 5 },
             wrapperCol: { span: 17 },
-          };
+        };
         return (
             <Modal
                 visible={visible}
-                title="Add Bill"
+                title={`${this.props.operation} Bill`}
                 onCancel={this.handleCancel}
                 footer={[
                     <Button
@@ -42,30 +101,46 @@ export default class BillForm extends Component {
                     >
                         Close
                     </Button>,
-                    <Button key="submit" type="primary" >
+                    <Button
+                        key="submit"
+                        type="primary"
+                        onClick={this.handleSubmit}
+                    >
                         Submit
                     </Button>
                 ]}
             >
                 <Form {...layout}>
                     <Form.Item label="Category">
-                        <Input 
+                        <Input
                             placeholder="Enter Category"
+                            value={category}
+                            onChange={this.handleChange('category')}
                         />
                     </Form.Item>
                     <Form.Item label="Description">
-                        <TextArea 
+                        <TextArea
                             placeholder="Enter Description"
+                            value={description}
+                            onChange={this.handleChange('description')}
                         />
                     </Form.Item>
                     <Form.Item label="Amount">
-                        <InputNumber 
+                        <InputNumber
                             placeholder="Enter Amount"
+                            value={amount}
+                            onChange={this.handleChange('amount')}
                         />
                     </Form.Item>
                     <Form.Item label="Date">
-                        <DatePicker 
-                            format='DD-MM-YYYY'
+                        <DatePicker
+                            format='MM-DD-YYYY'
+                            value={
+                                date === ''
+                                    ? ''
+                                    : Moment(date, 'MM-DD-YYYY')
+                            }
+                            onChange={(date, dateString) => this.handleDate(dateString)}
                         />
                     </Form.Item>
                 </Form>
@@ -73,3 +148,26 @@ export default class BillForm extends Component {
         )
     }
 }
+
+BillForm.propTypes = {
+    props: PropTypes
+};
+
+const mapStateToProps = state => {
+    return {
+        billData: state.BillState.billData
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            addBill,
+            editBill,
+            deleteBill
+        },
+        dispatch
+    );
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(BillForm);
