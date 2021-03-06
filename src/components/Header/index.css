@@ -1,7 +1,9 @@
 .header {
   padding: 20px;
   text-align: center;
-  background: #1abc9c;
-  color: white;
-  font-size: 30px;
+  background-color: #DDAF94;
+  /* background-color: #8388a20d; */
+  color: black;
+  font-size: 35px;
+  text-shadow: 6px 2px 5px red;
 }

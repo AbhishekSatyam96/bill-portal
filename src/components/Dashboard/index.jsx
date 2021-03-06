@@ -8,7 +8,13 @@ const { TabPane } = Tabs;
 export default class Dashboard extends Component {
     render() {
         return (
-            <div>
+            <div 
+                style={{
+                    margin: '10px',
+                    padding: '10px',
+                    backgroundColor: '#f1e8e8'
+                }}
+            >
                 <Tabs defaultActiveKey="1" centered>
                     <TabPane tab="Bill List" key="1">
                         <BillList />

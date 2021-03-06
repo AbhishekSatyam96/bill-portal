@@ -205,7 +205,7 @@ class BillList extends Component {
                     : null}
                 <Button
                     type="primary"
-                    style={{ float: 'left', margin: '3px' }}
+                    style={{ float: 'left'}}
                     icon={<PlusOutlined />}
                     onClick={() => this.setState({ operation: 'Add' })}
                 >
@@ -218,7 +218,6 @@ class BillList extends Component {
                     style={{
                         width: 500,
                         float: 'right',
-                        margin: '3px'
                     }}
                     onSearch={this.filterMinimumBill}
                     onChange={this.fetchList}
@@ -226,10 +225,11 @@ class BillList extends Component {
                 <Table
                     style={{
                         margin: '10px',
-                        padding: '20px'
+                        padding: '20px',
                     }}
                     dataSource={record}
                     columns={columns}
+                    bordered
                 />
             </div>
         )
