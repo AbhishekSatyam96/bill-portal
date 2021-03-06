@@ -1,7 +1,7 @@
 .tab-layout {
-    margin: 10px;
-    padding: 10px;
-    background-color: #f1e8e8;
+    margin: 5px 10px 5px 10px;
+    padding: 5px;
+    /* background-color: #f1e8e8; */
 }
 
 .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {

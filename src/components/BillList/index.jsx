@@ -200,7 +200,11 @@ class BillList extends Component {
             }
         ];
         return (
-            <div>
+            <div
+                style={{
+                    // backgroundColor: '#f1e8e8',
+                }}
+            >
                 {operation ?
                     <BillForm
                         visible={true}
@@ -233,7 +237,7 @@ class BillList extends Component {
                     dataSource={record}
                     columns={columns}
                     bordered
-                    scroll={{ y: 500 }}
+                    // scroll={{ y: 500 }}
                 />
             </div>
         )
