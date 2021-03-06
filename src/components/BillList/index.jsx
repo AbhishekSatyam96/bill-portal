@@ -98,13 +98,14 @@ class BillList extends Component {
         )),
     });
 
-    closeModal = async() => {
+    closeModal = () => {
         this.setState({ operation: ''})
-        await this.fetchList();
+        this.fetchList();
     }
 
-    handleDelete = (id, amount) => {
-        this.props.deleteBill(id);
+    handleDelete = async(id, amount) => {
+        await this.props.deleteBill(id);
+        this.fetchList();
         message.success(`Deleted Bill card of amount ${amount}`);
     }
 
@@ -123,7 +124,7 @@ class BillList extends Component {
             if(totalAmount + item.amount <= amount){
                 totalAmount = totalAmount + item.amount;
                 return item;
-            }
+            } return null;
         })
         this.setState({record: tempRecord})
     }
@@ -211,7 +212,7 @@ class BillList extends Component {
                     Add Bill
                 </Button>
                 <Search
-                    placeholder="Enter your budget amount here.."
+                    placeholder="Enter budget amount"
                     allowClear
                     enterButton="Filter for minimum no. of bill for given budget"
                     style={{
