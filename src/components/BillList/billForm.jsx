@@ -21,9 +21,9 @@ class BillForm extends Component {
     }
     
     componentDidMount = () => {
-        console.log("props of bill form", this.props);
         this.setState({ visible: this.props.visible })
         if (this.props.operation === 'Edit') {
+            console.log("editData",this.props.editData)
             const {
                 category, description, amount, date
             } = this.props.editData;

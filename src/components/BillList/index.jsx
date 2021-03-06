@@ -4,10 +4,11 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { deleteBill } from "../../redux/actions/BillActions";
-import { Table, Button, Input, Popconfirm, message } from 'antd';
+import { Table, Button, Input, Popconfirm, message, Tag } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import BillForm from './billForm';
+import Moment from 'moment';
 
 const { Search } = Input;
 class BillList extends Component {
@@ -27,7 +28,6 @@ class BillList extends Component {
     }
 
     componentDidMount = () => {
-        console.log("props of bill list", this.props);
         this.fetchList()
     }
 
@@ -110,7 +110,6 @@ class BillList extends Component {
     }
 
     filterMinimumBill = (amount) => {
-        console.log("amount", amount);
         this.setState({record: this.props.billData})
         const {
             record
@@ -133,12 +132,12 @@ class BillList extends Component {
         const {
             operation, editData, record
         } = this.state;
-        console.log("record...",record);
         const columns = [
             {
                 title: 'Id',
                 dataIndex: 'id',
                 key: 'id',
+                width: '5%'
             },
             {
                 title: 'Category',
@@ -152,17 +151,30 @@ class BillList extends Component {
                 key: 'description',
                 ...this.getColumnSearchProps('description')
             },
+            // {
+            //     title: 'Date (MM-DD-YYYY)',
+            //     dataIndex: 'date',
+            //     key: 'date',
+            //     ...this.getColumnSearchProps('date')
+            // },
             {
-                title: 'Date (MM-DD-YYYY)',
-                dataIndex: 'date',
+                title: 'Date',
                 key: 'date',
-                ...this.getColumnSearchProps('date')
+                render: (actionIndex) => (
+                    Moment(actionIndex.date).format('LL')
+                )
             },
             {
                 title: 'Amount',
                 dataIndex: 'amount',
                 key: 'amount',
                 ...this.getColumnSearchProps('amount')
+            },
+            {
+                title: 'Amount',
+                render: (actionIndex) => (
+                    <Tag color="#108ee9" style={{textAlign: 'center'}}>{actionIndex.amount}</Tag>
+                )
             },
             {
                 title: 'Action',
@@ -212,11 +224,11 @@ class BillList extends Component {
                     Add Bill
                 </Button>
                 <Search
-                    placeholder="Enter budget amount"
+                    placeholder="Enter budget to filter minimum no. of bills"
                     allowClear
-                    enterButton="Filter for minimum no. of bill for given budget"
+                    enterButton="Submit"
                     style={{
-                        width: 500,
+                        width: 380,
                         float: 'right',
                     }}
                     onSearch={this.filterMinimumBill}
@@ -225,11 +237,13 @@ class BillList extends Component {
                 <Table
                     style={{
                         margin: '10px',
-                        padding: '20px',
+                        padding: '5px',
+                        // border: 'solid black 1px'
                     }}
                     dataSource={record}
                     columns={columns}
                     bordered
+                    scroll={{ y: 500 }}
                 />
             </div>
         )
