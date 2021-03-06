@@ -12,9 +12,7 @@ export default class Dashboard extends Component {
                     <TabPane tab="Bill List" key="1">
                         <BillList />
                     </TabPane>
-                    <TabPane tab="Required bill to pay" key="3">
-                        Content of Tab Pane 2
-                    </TabPane><TabPane tab="Monthly Bill Cycle" key="2">
+                    <TabPane tab="Monthly Bill Cycle" key="2">
                         Content of Tab Pane 3
                     </TabPane>
                 </Tabs>

@@ -19,6 +19,7 @@ class BillForm extends Component {
             date: ''
         }
     }
+    
     componentDidMount = () => {
         console.log("props of bill form", this.props);
         this.setState({ visible: this.props.visible })
@@ -43,16 +44,16 @@ class BillForm extends Component {
         }
     }
 
-    handleCancel = () => {
+    handleCancel = async() => {
         this.setState({ visible: false });
-        this.props.closeModal();
+        await this.props.closeModal();
     }
 
     handleDate = (dateString) => {
         this.setState({ date: dateString })
     }
 
-    handleSubmit = () => {
+    handleSubmit = async() => {
         const {
             description, category, date, amount
         } = this.state;
@@ -64,7 +65,7 @@ class BillForm extends Component {
                 amount,
                 date
             }
-            this.props.editBill(payload);
+            await this.props.editBill(payload);
             message.success("Updated successfully..!")
         } else {
             const payload = {
@@ -74,10 +75,9 @@ class BillForm extends Component {
                 amount,
                 date
             }
-            this.props.addBill(payload);
+            await this.props.addBill(payload);
             message.success(`Bill created with amount of ${amount}`);
         }
-
         this.handleCancel();
     }
 

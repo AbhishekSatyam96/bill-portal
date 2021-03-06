@@ -8,6 +8,8 @@ import { Table, Button, Input, Popconfirm, message } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import BillForm from './billForm';
+
+const { Search } = Input;
 class BillList extends Component {
     constructor(props) {
         super(props);
@@ -15,11 +17,18 @@ class BillList extends Component {
             searchText: '',
             searchedColumn: '',
             operation: '',
-            editData: []
+            editData: [],
+            record: []
         }
     }
+
+    fetchList = () => {
+        this.setState({record: this.props.billData})
+    }
+
     componentDidMount = () => {
         console.log("props of bill list", this.props);
+        this.fetchList()
     }
 
     handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -89,8 +98,9 @@ class BillList extends Component {
         )),
     });
 
-    closeModal = () => {
-        this.setState({ operation: '' })
+    closeModal = async() => {
+        this.setState({ operation: ''})
+        await this.fetchList();
     }
 
     handleDelete = (id, amount) => {
@@ -98,10 +108,31 @@ class BillList extends Component {
         message.success(`Deleted Bill card of amount ${amount}`);
     }
 
+    filterMinimumBill = (amount) => {
+        console.log("amount", amount);
+        this.setState({record: this.props.billData})
+        const {
+            record
+        } = this.state;
+        let tempRecord = record;
+        tempRecord.sort((a,b) => {
+            return a.amount > b.amount ? -1 : 1
+        });
+        let totalAmount = 0
+        tempRecord = tempRecord.filter(item => {
+            if(totalAmount + item.amount <= amount){
+                totalAmount = totalAmount + item.amount;
+                return item;
+            }
+        })
+        this.setState({record: tempRecord})
+    }
+
     render() {
         const {
-            operation, editData
+            operation, editData, record
         } = this.state;
+        console.log("record...",record);
         const columns = [
             {
                 title: 'Id',
@@ -179,12 +210,24 @@ class BillList extends Component {
                 >
                     Add Bill
                 </Button>
+                <Search
+                    placeholder="Enter your budget amount here.."
+                    allowClear
+                    enterButton="Filter for minimum no. of bill for given budget"
+                    style={{
+                        width: 500,
+                        float: 'right',
+                        margin: '3px'
+                    }}
+                    onSearch={this.filterMinimumBill}
+                    onChange={this.fetchList}
+                />
                 <Table
                     style={{
                         margin: '10px',
                         padding: '20px'
                     }}
-                    dataSource={this.props.billData}
+                    dataSource={record}
                     columns={columns}
                 />
             </div>
