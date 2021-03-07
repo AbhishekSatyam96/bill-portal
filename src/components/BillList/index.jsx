@@ -19,12 +19,12 @@ class BillList extends Component {
             searchedColumn: '',
             operation: '',
             editData: [],
-            record: []
+            record: [],
         }
     }
 
     fetchList = () => {
-        this.setState({record: this.props.billData})
+        this.setState({ record: this.props.billData })
     }
 
     componentDidMount = () => {
@@ -99,33 +99,34 @@ class BillList extends Component {
     });
 
     closeModal = () => {
-        this.setState({ operation: ''})
+        this.setState({ operation: '' })
         this.fetchList();
     }
 
-    handleDelete = async(amount, description) => {
+    handleDelete = async (amount, description) => {
         await this.props.deleteBill(description);
         this.fetchList();
         message.success(`Deleted Bill card of amount ${amount}`);
     }
 
     filterMinimumBill = (amount) => {
-        this.setState({record: this.props.billData})
-        const {
-            record
-        } = this.state;
-        let tempRecord = record;
-        tempRecord.sort((a,b) => {
-            return a.amount > b.amount ? -1 : 1
-        });
-        let totalAmount = 0
-        tempRecord = tempRecord.filter(item => {
-            if(totalAmount + item.amount <= amount){
-                totalAmount = totalAmount + item.amount;
-                return item;
-            } return null;
-        })
-        this.setState({record: tempRecord})
+        if (amount) {
+            const {
+                record
+            } = this.state;
+            let tempRecord = record;
+            tempRecord.sort((a, b) => {
+                return a.amount > b.amount ? -1 : 1
+            });
+            let totalAmount = 0;
+            tempRecord = tempRecord.filter(item => {
+                if (totalAmount + item.amount <= amount) {
+                    totalAmount = totalAmount + item.amount;
+                    return item;
+                } return null;
+            })
+            this.setState({ record: tempRecord })
+        }
     }
 
     render() {
@@ -133,12 +134,6 @@ class BillList extends Component {
             operation, editData, record
         } = this.state;
         const columns = [
-            // {
-            //     title: 'Id',
-            //     dataIndex: 'id',
-            //     key: 'id',
-            //     width: '5%'
-            // },
             {
                 title: 'Category',
                 dataIndex: 'category',
@@ -160,14 +155,8 @@ class BillList extends Component {
             },
             {
                 title: 'Amount',
-                dataIndex: 'amount',
-                key: 'amount',
-                ...this.getColumnSearchProps('amount')
-            },
-            {
-                title: 'Amount',
                 render: (actionIndex) => (
-                    <Tag color="#108ee9" style={{textAlign: 'center'}}>{actionIndex.amount}</Tag>
+                    <Tag color="#108ee9" style={{ textAlign: 'center' }}>{actionIndex.amount}</Tag>
                 )
             },
             {
@@ -191,7 +180,7 @@ class BillList extends Component {
                         >
                             <Button
                                 icon={<DeleteOutlined />}
-                                style={{ backgroundColor: '#ee0202'}}>
+                                style={{ backgroundColor: '#ee0202' }}>
                                 Delete
                             </Button>
                         </Popconfirm>
@@ -215,7 +204,7 @@ class BillList extends Component {
                     : null}
                 <Button
                     type="primary"
-                    style={{ float: 'left'}}
+                    style={{ float: 'left' }}
                     icon={<PlusOutlined />}
                     onClick={() => this.setState({ operation: 'Add' })}
                 >
@@ -237,7 +226,7 @@ class BillList extends Component {
                     dataSource={record}
                     columns={columns}
                     bordered
-                    // scroll={{ y: 500 }}
+                // scroll={{ y: 500 }}
                 />
             </div>
         )
