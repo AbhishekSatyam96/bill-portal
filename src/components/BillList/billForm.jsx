@@ -23,7 +23,6 @@ class BillForm extends Component {
     componentDidMount = () => {
         this.setState({ visible: this.props.visible })
         if (this.props.operation === 'Edit') {
-            console.log("editData",this.props.editData)
             const {
                 category, description, amount, date
             } = this.props.editData;
@@ -57,6 +56,22 @@ class BillForm extends Component {
         const {
             description, category, date, amount
         } = this.state;
+        if(!category){
+            message.error("Please enter Category to continue...");
+            return;
+        }
+        if(!description){
+            message.error("Please enter description to continue...");
+            return;
+        }
+        if(!amount){
+            message.error("Please enter amount to continue...");
+            return;
+        }
+        if(!date){
+            message.info("Please enter date to continue...");
+            return;
+        }
         if (this.props.operation === 'Edit') {
             const payload = {
                 id: this.props.editData.id,
