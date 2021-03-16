@@ -5,10 +5,10 @@ export default class Footer extends Component {
     render() {
         return (
             <div className="footer">
-                Created as an assigment for &nbsp;
-                <a href="https://www.brightmoney.co/" target="_blank" rel="noreferrer">
-                    Bright Money
-                </a> &nbsp;by Abhishek Satyam
+                Created by &nbsp;
+                <a href="https://www.linkedin.com/in/abhishek-satyam/" target="_blank" rel="noreferrer">
+                    Abhishek Satyam
+                </a>
             </div>
         )
     }
